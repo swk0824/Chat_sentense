@@ -1,0 +1,143 @@
+<html>
+<head>
+	<title>두 사람의 성격으로 인한 관계 분석</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../static/csscode.css">
+</head>
+<body>
+	<header>
+		<div class="header-container">
+			<div class="header-title">
+                <h3> Just with a birthdate</h3>
+				<h1>두 사람의 성격으로 인한 관계 분석</h1>
+				<p>AI-assisted web services</p>
+				<a href="#contact" class="btn">Get in touch</a>
+			</div>
+			<div class="header-image">
+				<img src="../static/a_oriental_new.png" alt="Big Picture">
+			</div>
+		</div>
+	</header>
+	
+
+    <section id="contact">
+        <div class="contact-container">
+          <h2>정보 입력</h2>
+         <form method="POST">
+  
+            <div class="form-group">
+              <label for="birthday1">생일_1:</label>
+              <input type="text" id="birthday1" name="birthday1" placeholder="년월일시"  value="1990-01-01 12:00" required>
+            </div>
+            <div class="form-group">
+              <label for="gender1">성별_1:</label>
+              <select id="gender1" name="gender1" required>
+                <option value="">- 선택 -</option>
+                <option value="man" selected>man </option>
+                <option value="woman">woman</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="birthday2">생일_2:</label>
+                <input type="text" id="birthday2" name="birthday2" placeholder="년월일시" value="1993-03-01 11:00" required>
+              </div>
+              <div class="form-group">
+                <label for="gender2">성별_2:</label>
+                <select id="gender2" name="gender2" required>
+                  <option value="">- 선택 -</option>
+                  <option value="man">man</option>
+                  <option value="woman" selected>woman</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="question">질문:</label>
+                <input type="text" id="question" name="question" value="둘의 궁합에서 좋은점 3가지 나쁜점 3가지를 알려주세요" required>
+              </div>
+              
+         
+                <button type="submit" class="btn" id="submitBtn">전송</button>
+              
+              
+            <div class="form-group">
+              <label for="message">답변:</label>
+              <div id="message" name="message" required></div>
+            </div>
+            
+          </form>
+        </div>
+      </section>
+
+      
+    <!-- <section id="about">
+		<div class="about-container">
+			<h2>About Us</h2>
+			<p>모든 사람들이 손쉽게 이용할 수 있는 운명학 서비스를 개발/운영하는 Technology Company입니다.</p>
+			<p>태양계의 천체 운동을 기준으로 바뀌어 가는 기운 변화와 개인적 운명 변화를 매칭하여 쉽게 활용할 수 있도록 끊임없이 기술적 개발을 하고 있으며, 고객의 새로운 니즈에 부합하여 최고의 운명학 분석 서비스를 지속적으로 제공하겠습니다.</p>
+		</div>
+	</section> -->
+
+	<footer>
+		<div class="footer-container">
+			<p>&copy; 2023 SPOON5. All rights reserved.</p>
+		</div>
+	</footer>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
+<script>
+  const submitBtn = document.getElementById('submitBtn');
+
+  submitBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    console.log('!!!!!!!!!!!!!!!');
+    // 입력된 값 가져오기
+    const birthday1 = document.getElementById('birthday1').value;
+    const gender1 = document.getElementById('gender1').value;
+    const birthday2 = document.getElementById('birthday2').value;
+    const gender2 = document.getElementById('gender2').value;
+    const question = document.getElementById('question').value;
+    const resultContainer = document.getElementById('message');
+
+    // API 호출
+    axios.post('/api/data', {
+      birthday1: birthday1,
+      gender1: gender1,
+      birthday2: birthday2,
+      gender2: gender2,
+      question: question
+    })
+    .then(response => {
+
+          const {  my_char, partner_char, result } = response.data;
+          console.log(response.data);
+          console.log(my_char)
+          console.log(partner_char)
+          const myCharText = my_char.join('\n');
+          const partnerCharText = partner_char.join('\n');
+
+          resultContainer.innerHTML = `
+              <h3>나의 성격:</h3>
+              <p>${myCharText}</p>
+            </div>
+            <div>
+              <h3>상대방의 성격:</h3>
+              <p>${partnerCharText}</p>
+            </div>
+            <div>
+              <h3>결과:</h3>
+              <p>${result.replace(/\n/g, '<br>')}</p>
+            </div>
+          `;
+    })
+    .catch(error => {
+          console.log(error);
+    })});
+</script>
+
+</html>
+
